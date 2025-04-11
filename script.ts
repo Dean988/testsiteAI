@@ -13,8 +13,9 @@ interface EasterEgg {
 
 // Classe principale per gestire l'applicazione
 class SiteManager {
-    private animatedElements: NodeListOf<Element>;
-    private images: NodeListOf<HTMLImageElement>;
+    // Inizializzazione delle proprietà con valori di default
+    private animatedElements: NodeListOf<Element> = document.querySelectorAll('.animated');
+    private images: NodeListOf<HTMLImageElement> = document.querySelectorAll('.image-placeholder img');
     private easterEggs: EasterEgg[] = [];
     private konamiSequence: string[] = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
     private userSequence: string[] = [];
@@ -27,7 +28,7 @@ class SiteManager {
     }
 
     private init(): void {
-        // Inizializza gli elementi animati
+        // Inizializza gli elementi animati (ri-seleziona per sicurezza)
         this.animatedElements = document.querySelectorAll('.animated');
         this.images = document.querySelectorAll('.image-placeholder img');
 
@@ -253,7 +254,7 @@ class SiteManager {
 
         // Smooth scrolling migliorato
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+            anchor.addEventListener('click', function(this: HTMLAnchorElement, e) {
                 e.preventDefault();
                 const targetId = this.getAttribute('href');
                 if (targetId) {
@@ -296,9 +297,29 @@ class SiteManager {
     }
 
     private setupParallax(): void {
+        // Rimuoviamo l'effetto parallasse che causava problemi
+        // e implementiamo un effetto più sottile e controllato
         window.addEventListener('scroll', () => {
+            // Utilizziamo un effetto più leggero che non causa spazi bianchi
             const scrollPosition = window.pageYOffset;
-            document.body.style.backgroundPositionY = `${scrollPosition * 0.5}px`;
+            
+            // Effetto sulle sezioni di contenuto
+            document.querySelectorAll('.content-box').forEach((box, index) => {
+                const offset = index * 0.02;
+                const opacity = Math.min(1, 0.8 + (scrollPosition * 0.0005) - offset);
+                // Conversione a HTMLElement per accedere a style
+                const boxEl = box as HTMLElement;
+                boxEl.style.opacity = opacity.toString();
+            });
+            
+            // Effetto sottile sull'header
+            const header = document.querySelector('header');
+            if (header) {
+                const headerOpacity = Math.min(0.95, 0.5 + (scrollPosition * 0.001));
+                // Conversione a HTMLElement per accedere a style
+                const headerEl = header as HTMLElement;
+                headerEl.style.backgroundColor = `rgba(0, 0, 0, ${headerOpacity})`;
+            }
         });
     }
 
