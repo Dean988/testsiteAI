@@ -1,0 +1,18 @@
+{
+  "name": "myfirstsite-experience",
+  "version": "1.0.0",
+  "description": "Un sito web personale con effetti interattivi e TypeScript",
+  "main": "script.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "serve": "lite-server"
+  },
+  "dependencies": {
+    "gsap": "^3.12.2"
+  },
+  "devDependencies": {
+    "lite-server": "^2.6.1",
+    "typescript": "^5.2.2"
+  }
+} 
