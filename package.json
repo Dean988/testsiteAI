@@ -4,7 +4,7 @@
   "description": "Un sito web personale con effetti interattivi e TypeScript",
   "main": "script.js",
   "scripts": {
-    "build": "tsc",
+    "build": "mkdir -p public && tsc && cp index.html script.js style.css public/",
     "watch": "tsc --watch",
     "serve": "lite-server"
   },
